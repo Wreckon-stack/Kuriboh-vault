@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 type State = {
   count: number;
@@ -9,15 +9,16 @@ type State = {
 };
 
 const DEFAULT_KURIBOH_IMG = "/kuriboh.jpg";
-const DEFAULT_BG = "/bg.jpg";
 
 const CA = "HJHYKbc4sCdBAgKbRWpZZJHJm2nt5CKPaZG7TZVNpump";
 const X_COMMUNITY = "https://x.com/i/communities/2026803416702357892";
+const BUY_LINK = `https://pump.fun/coin/${CA}`;
 
 export default function Page() {
   const [state, setState] = useState<State>({ count: 0, wishlist: [] });
   const [loading, setLoading] = useState(true);
 
+  const [caCopied, setCaCopied] = useState(false);
   const [adminOpen, setAdminOpen] = useState(false);
   const [adminPw, setAdminPw] = useState("");
   const [adminAuthed, setAdminAuthed] = useState(false);
@@ -26,15 +27,11 @@ export default function Page() {
   const [draftCount, setDraftCount] = useState<number>(0);
   const [newUrl, setNewUrl] = useState("");
 
-  const bgStyle = useMemo(
-    () => ({
-      backgroundImage: `url("${DEFAULT_BG}")`,
-      backgroundSize: "cover",
-      backgroundPosition: "center top",
-      backgroundAttachment: "fixed" as const,
-    }),
-    []
-  );
+  function copyCA() {
+    navigator.clipboard.writeText(CA);
+    setCaCopied(true);
+    setTimeout(() => setCaCopied(false), 2000);
+  }
 
   async function load() {
     setLoading(true);
@@ -117,12 +114,7 @@ export default function Page() {
   }
 
   return (
-    <main style={{ minHeight: "100vh", position: "relative" }}>
-      {/* Background */}
-      <div style={{ position: "fixed", inset: 0, zIndex: -2, ...bgStyle }} />
-      {/* Very light scrim — just enough to keep text readable */}
-      <div style={{ position: "fixed", inset: 0, zIndex: -1, pointerEvents: "none", background: "rgba(0,0,0,.18)" }} />
-
+    <main style={{ minHeight: "100vh", background: "#000", color: "#fff" }}>
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "40px 18px 80px" }}>
 
         {/* ── Hero title ── */}
@@ -135,31 +127,63 @@ export default function Page() {
               letterSpacing: ".14em",
               textTransform: "uppercase",
               lineHeight: 1,
-              background: "linear-gradient(135deg, #f7d46b 0%, #fff 45%, #a48aff 100%)",
+              background: "linear-gradient(135deg, #c8960c 0%, #ffd700 40%, #f7d46b 65%, #ffd700 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
-              filter: "drop-shadow(0 0 48px rgba(124,92,255,.55)) drop-shadow(0 2px 8px rgba(0,0,0,.6))",
+              filter: "drop-shadow(0 0 40px rgba(247,212,107,.7)) drop-shadow(0 2px 8px rgba(0,0,0,.8))",
             }}
           >
             KURIBOH VAULT
           </h1>
+
           {/* Nav row */}
-          <div style={{ display: "flex", gap: 10, justifyContent: "center", marginTop: 22 }}>
+          <div style={{ display: "flex", gap: 12, justifyContent: "center", marginTop: 24, flexWrap: "wrap" }}>
             <a
               href={X_COMMUNITY}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ ...btnStyle({ ok: true }), textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 6 }}
+              style={{
+                textDecoration: "none",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                padding: "11px 22px",
+                borderRadius: 14,
+                background: "#fff",
+                border: "2px solid #fff",
+                color: "#000",
+                fontWeight: 800,
+                fontSize: 15,
+                boxShadow: "0 0 28px rgba(255,255,255,.4)",
+              }}
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.912-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117Z" />
               </svg>
               Join Community
             </a>
-            <button onClick={() => setAdminOpen(true)} style={btnStyle()}>
-              Admin
-            </button>
+            <a
+              href={BUY_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                textDecoration: "none",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                padding: "11px 22px",
+                borderRadius: 14,
+                background: "rgba(247,212,107,.15)",
+                border: "2px solid rgba(247,212,107,.8)",
+                color: "#ffd700",
+                fontWeight: 800,
+                fontSize: 15,
+                boxShadow: "0 0 20px rgba(247,212,107,.25)",
+              }}
+            >
+              Buy $KURIBOH
+            </a>
           </div>
         </div>
 
@@ -197,24 +221,32 @@ export default function Page() {
                     width: 140,
                     height: 140,
                     borderRadius: 24,
-                    border: "1px solid rgba(247,212,107,.35)",
+                    border: "2px solid rgba(247,212,107,.6)",
                     overflow: "hidden",
-                    background: "rgba(0,0,0,.20)",
-                    boxShadow: "0 0 0 1px rgba(124,92,255,.18), 0 0 32px rgba(124,92,255,.30), 0 18px 40px rgba(0,0,0,.45)",
+                    background: "rgba(0,0,0,.40)",
+                    boxShadow: "0 0 32px rgba(247,212,107,.35), 0 18px 40px rgba(0,0,0,.6)",
                   }}
                 >
                   <img src={DEFAULT_KURIBOH_IMG} alt="Kuriboh" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 </div>
 
                 <div>
-                  <p style={{ margin: "0 0 12px", lineHeight: 1.6, fontSize: 15 }}>
+                  <p style={{ margin: "0 0 12px", lineHeight: 1.6, fontSize: 15, color: "#fff" }}>
                     Welcome to the Kuriboh Vault — part shrine, part scoreboard, part wishlist.
                     The homebase for our Kuriboh memecoin and the eternal mission: collect more Kuribohs.
                   </p>
-                  <div style={{ height: 1, background: "linear-gradient(90deg, transparent, rgba(124,92,255,.40), transparent)", margin: "12px 0" }} />
-                  <div style={monoStyle()}>
-                    <div style={{ color: "rgba(255,255,255,.45)", marginBottom: 5, fontSize: 11, letterSpacing: ".08em", textTransform: "uppercase" }}>Contract Address</div>
-                    {CA}
+                  <div style={{ height: 1, background: "linear-gradient(90deg, transparent, rgba(247,212,107,.5), transparent)", margin: "12px 0" }} />
+                  <div style={{ ...monoStyle(), display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+                    <div>
+                      <div style={{ color: "rgba(247,212,107,.6)", marginBottom: 5, fontSize: 11, letterSpacing: ".08em", textTransform: "uppercase" }}>Contract Address</div>
+                      <span style={{ wordBreak: "break-all", color: "#fff" }}>{CA}</span>
+                    </div>
+                    <button
+                      onClick={copyCA}
+                      style={{ ...btnStyle({ ok: caCopied }), flexShrink: 0, fontSize: 12, padding: "6px 12px", transition: "all .2s" }}
+                    >
+                      {caCopied ? "Copied!" : "Copy"}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -223,10 +255,10 @@ export default function Page() {
             {/* Wishlist */}
             <Card title="WISHLIST">
               {loading ? (
-                <p style={{ color: "var(--muted)", margin: 0 }}>Loading…</p>
+                <p style={{ color: "rgba(255,255,255,.5)", margin: 0 }}>Loading…</p>
               ) : state.wishlist.length === 0 ? (
-                <p style={{ color: "var(--muted)", margin: 0 }}>
-                  No wishlist items yet. Open <b>Admin</b> to add image URLs.
+                <p style={{ color: "rgba(255,255,255,.5)", margin: 0 }}>
+                  No wishlist items yet. Open <b style={{ color: "#ffd700" }}>Admin</b> to add image URLs.
                 </p>
               ) : (
                 <div style={{ display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))" }}>
@@ -235,14 +267,18 @@ export default function Page() {
                       key={url}
                       style={{
                         borderRadius: 18,
-                        border: "1px solid rgba(124,92,255,.22)",
-                        background: "rgba(0,0,0,.15)",
+                        border: "2px solid rgba(247,212,107,.4)",
+                        background: "rgba(10,8,0,.6)",
                         overflow: "hidden",
-                        boxShadow: "0 16px 40px rgba(0,0,0,.30)",
+                        boxShadow: "0 0 20px rgba(247,212,107,.15), 0 16px 40px rgba(0,0,0,.5)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        aspectRatio: "3/4",
                       }}
                       title={url}
                     >
-                      <img src={url} alt="Wishlist card" style={{ width: "100%", height: 220, objectFit: "cover", display: "block" }} />
+                      <img src={url} alt="Wishlist card" style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }} />
                     </div>
                   ))}
                 </div>
@@ -254,7 +290,7 @@ export default function Page() {
           <div style={{ display: "grid", gap: 16, alignContent: "start" }}>
             <Card title="KURIBOHS OWNED">
               <div style={{ textAlign: "center", padding: "16px 0 8px" }}>
-                <p style={{ margin: 0, color: "rgba(255,255,255,.45)", fontSize: 12, letterSpacing: ".12em", textTransform: "uppercase", marginBottom: 8 }}>
+                <p style={{ margin: 0, color: "rgba(255,255,255,.5)", fontSize: 12, letterSpacing: ".12em", textTransform: "uppercase", marginBottom: 8 }}>
                   Current count
                 </p>
                 <p
@@ -263,11 +299,11 @@ export default function Page() {
                     fontSize: "clamp(64px, 14vw, 96px)",
                     lineHeight: 1,
                     fontWeight: 900,
-                    background: "linear-gradient(135deg, #f7d46b, #fff)",
+                    background: "linear-gradient(135deg, #c8960c, #ffd700, #f7d46b)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     backgroundClip: "text",
-                    filter: "drop-shadow(0 0 24px rgba(247,212,107,.45))",
+                    filter: "drop-shadow(0 0 32px rgba(247,212,107,.7))",
                   }}
                 >
                   {loading ? "…" : state.count}
@@ -284,10 +320,10 @@ export default function Page() {
           <div style={modalCard()} onClick={(e) => e.stopPropagation()}>
             <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "center" }}>
               <div>
-                <div style={{ letterSpacing: ".18em", textTransform: "uppercase", color: "var(--muted)", fontSize: 12 }}>
+                <div style={{ letterSpacing: ".18em", textTransform: "uppercase", color: "rgba(247,212,107,.6)", fontSize: 12 }}>
                   Admin Panel
                 </div>
-                <div style={{ fontSize: 18, marginTop: 6, display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+                <div style={{ fontSize: 18, marginTop: 6, color: "#fff", display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
                   Kuriboh Control Console
                   {adminAuthed && (
                     <span
@@ -313,10 +349,10 @@ export default function Page() {
               </button>
             </div>
 
-            <div style={{ height: 1, background: "linear-gradient(90deg, transparent, rgba(124,92,255,.35), transparent)", margin: "14px 0" }} />
+            <div style={{ height: 1, background: "linear-gradient(90deg, transparent, rgba(247,212,107,.4), transparent)", margin: "14px 0" }} />
 
             <div style={{ display: "grid", gap: 10 }}>
-              <label style={{ color: "var(--muted)", fontSize: 13 }}>Admin Password</label>
+              <label style={{ color: "rgba(255,255,255,.6)", fontSize: 13 }}>Admin Password</label>
               <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                 <input
                   type="password"
@@ -336,12 +372,12 @@ export default function Page() {
               )}
             </div>
 
-            <div style={{ height: 1, background: "linear-gradient(90deg, transparent, rgba(124,92,255,.35), transparent)", margin: "14px 0" }} />
+            <div style={{ height: 1, background: "linear-gradient(90deg, transparent, rgba(247,212,107,.4), transparent)", margin: "14px 0" }} />
 
             <div style={{ opacity: adminAuthed ? 1 : 0.5, pointerEvents: adminAuthed ? "auto" : "none" }}>
               <div style={{ display: "grid", gap: 12 }}>
                 <div style={{ display: "grid", gap: 8 }}>
-                  <div style={{ color: "var(--muted)", fontSize: 13 }}>Edit Kuriboh Count</div>
+                  <div style={{ color: "rgba(255,255,255,.6)", fontSize: 13 }}>Edit Kuriboh Count</div>
                   <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                     <input
                       type="number"
@@ -356,7 +392,7 @@ export default function Page() {
                 </div>
 
                 <div style={{ display: "grid", gap: 8 }}>
-                  <div style={{ color: "var(--muted)", fontSize: 13 }}>Add Wishlist Image (URL)</div>
+                  <div style={{ color: "rgba(255,255,255,.6)", fontSize: 13 }}>Add Wishlist Image (URL)</div>
                   <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                     <input
                       type="url"
@@ -372,9 +408,9 @@ export default function Page() {
                 </div>
 
                 <div style={{ display: "grid", gap: 8 }}>
-                  <div style={{ color: "var(--muted)", fontSize: 13 }}>Remove Wishlist Items</div>
+                  <div style={{ color: "rgba(255,255,255,.6)", fontSize: 13 }}>Remove Wishlist Items</div>
                   {state.wishlist.length === 0 ? (
-                    <div style={{ color: "var(--muted)", fontSize: 13 }}>No wishlist items yet.</div>
+                    <div style={{ color: "rgba(255,255,255,.4)", fontSize: 13 }}>No wishlist items yet.</div>
                   ) : (
                     <div style={{ display: "grid", gap: 10 }}>
                       {state.wishlist.map((url) => (
@@ -385,13 +421,13 @@ export default function Page() {
                             gap: 10,
                             alignItems: "center",
                             justifyContent: "space-between",
-                            border: "1px solid rgba(124,92,255,.18)",
-                            background: "rgba(0,0,0,.18)",
+                            border: "1px solid rgba(247,212,107,.2)",
+                            background: "rgba(247,212,107,.04)",
                             padding: "10px 12px",
                             borderRadius: 14,
                           }}
                         >
-                          <div style={{ fontSize: 12, color: "var(--muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          <div style={{ fontSize: 12, color: "rgba(255,255,255,.5)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                             {url}
                           </div>
                           <button onClick={() => adminRemoveWishlist(url)} style={btnStyle({ danger: true })}>
@@ -406,7 +442,7 @@ export default function Page() {
             </div>
 
             {!adminAuthed && (
-              <div style={{ marginTop: 12, color: "var(--muted)", fontSize: 12 }}>
+              <div style={{ marginTop: 12, color: "rgba(255,255,255,.35)", fontSize: 12 }}>
                 Tip: this is server-side protection — don't share the password.
               </div>
             )}
@@ -414,7 +450,29 @@ export default function Page() {
         </div>
       )}
 
-      <style jsx global>{`
+      {/* Floating admin button */}
+      <button
+        onClick={() => setAdminOpen(true)}
+        style={{
+          position: "fixed",
+          bottom: 20,
+          right: 20,
+          zIndex: 40,
+          padding: "9px 18px",
+          borderRadius: 14,
+          background: "rgba(247,212,107,.12)",
+          border: "2px solid rgba(247,212,107,.7)",
+          color: "#ffd700",
+          fontWeight: 700,
+          fontSize: 13,
+          cursor: "pointer",
+          boxShadow: "0 0 16px rgba(247,212,107,.2)",
+        }}
+      >
+        Admin
+      </button>
+
+      <style>{`
         @media (min-width: 900px) {
           .grid {
             grid-template-columns: 1.2fr 0.8fr !important;
@@ -429,11 +487,10 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
   return (
     <section
       style={{
-        border: "1px solid rgba(124,92,255,.20)",
+        border: "1px solid rgba(247,212,107,.25)",
         borderRadius: 22,
-        background: "linear-gradient(160deg, rgba(8,10,30,.42), rgba(8,10,30,.20))",
-        boxShadow: "0 0 0 1px rgba(124,92,255,.10), 0 20px 60px rgba(0,0,0,.35)",
-        backdropFilter: "blur(22px)",
+        background: "rgba(15,12,0,.85)",
+        boxShadow: "0 0 0 1px rgba(247,212,107,.08), 0 20px 60px rgba(0,0,0,.6)",
         overflow: "hidden",
         position: "relative",
       }}
@@ -443,15 +500,15 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
           position: "absolute",
           inset: -2,
           background:
-            "radial-gradient(800px 300px at 20% 0%, rgba(124,92,255,.14), transparent 60%), radial-gradient(900px 320px at 80% 10%, rgba(247,212,107,.09), transparent 55%)",
+            "radial-gradient(700px 250px at 20% 0%, rgba(247,212,107,.07), transparent 60%)",
           pointerEvents: "none",
         }}
       />
       <div style={{ position: "relative", padding: 20 }}>
-        <div style={{ margin: "0 0 10px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(255,255,255,.40)", fontWeight: 700 }}>
+        <div style={{ margin: "0 0 10px", fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(247,212,107,.7)", fontWeight: 700 }}>
           {title}
         </div>
-        <div style={{ height: 1, background: "linear-gradient(90deg, transparent, rgba(124,92,255,.30), transparent)", margin: "12px 0" }} />
+        <div style={{ height: 1, background: "linear-gradient(90deg, transparent, rgba(247,212,107,.35), transparent)", margin: "12px 0" }} />
         {children}
       </div>
     </section>
@@ -463,18 +520,18 @@ function btnStyle(opts?: { danger?: boolean; ok?: boolean; ghost?: boolean }) {
     ? "1px solid rgba(255,77,109,.55)"
     : opts?.ok
       ? "1px solid rgba(34,197,94,.55)"
-      : "1px solid rgba(124,92,255,.35)";
+      : "1px solid rgba(247,212,107,.35)";
   const bg = opts?.ghost
-    ? "rgba(0,0,0,.15)"
+    ? "rgba(255,255,255,.08)"
     : opts?.danger
       ? "rgba(255,77,109,.12)"
       : opts?.ok
         ? "rgba(34,197,94,.12)"
-        : "rgba(124,92,255,.12)";
+        : "rgba(247,212,107,.10)";
   return {
     border,
     background: bg,
-    color: "var(--text)",
+    color: "#fff",
     padding: "10px 16px",
     borderRadius: 14,
     cursor: "pointer",
@@ -490,9 +547,9 @@ function inputStyle(opts?: { width?: number; minWidth?: number; flex?: number })
     flex: opts?.flex ?? undefined,
     padding: "10px 12px",
     borderRadius: 14,
-    border: "1px solid rgba(124,92,255,.25)",
-    background: "rgba(0,0,0,.22)",
-    color: "var(--text)",
+    border: "1px solid rgba(247,212,107,.3)",
+    background: "rgba(0,0,0,.5)",
+    color: "#fff",
     outline: "none",
   } as const;
 }
@@ -501,9 +558,9 @@ function monoStyle() {
   return {
     fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace',
     fontSize: 12,
-    color: "#cfe0ff",
-    background: "rgba(0,0,0,.25)",
-    border: "1px solid rgba(124,92,255,.20)",
+    color: "#fff",
+    background: "rgba(0,0,0,.4)",
+    border: "1px solid rgba(247,212,107,.2)",
     padding: "10px 12px",
     borderRadius: 14,
     overflow: "auto",
@@ -514,7 +571,7 @@ function modalBackdrop() {
   return {
     position: "fixed" as const,
     inset: 0,
-    background: "rgba(0,0,0,.55)",
+    background: "rgba(0,0,0,.75)",
     display: "grid",
     placeItems: "center",
     padding: 16,
@@ -526,10 +583,9 @@ function modalCard() {
   return {
     width: "min(860px, 100%)",
     borderRadius: 22,
-    border: "1px solid rgba(124,92,255,.22)",
-    background: "linear-gradient(180deg, rgba(10,12,28,.92), rgba(10,12,28,.75))",
-    boxShadow: "0 0 0 1px rgba(124,92,255,.10), 0 30px 90px rgba(0,0,0,.55)",
+    border: "1px solid rgba(247,212,107,.25)",
+    background: "rgba(10,8,0,.97)",
+    boxShadow: "0 0 0 1px rgba(247,212,107,.08), 0 30px 90px rgba(0,0,0,.8)",
     padding: 20,
-    backdropFilter: "blur(20px)",
   };
 }
